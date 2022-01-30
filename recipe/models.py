@@ -1,6 +1,7 @@
 from django.db import models
 from PIL import Image  # to work with image
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 """
@@ -25,13 +26,14 @@ class Recipe(models.Model):
     recipeurl= models.URLField(max_length=200, blank=True)
     recipeimage = models.ImageField(upload_to= 'recipe/%Y/%m/%d/')
     created = models.DateTimeField(auto_now_add=True)
-    #hunter = models.ForeignKey(User, on_delete=models.CASCADE)
+    hunter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
 
     # we are overriding save method
     # via super() we can inherit all the attributes anf properties of save method already written
+    # how to get url for recipeimage
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         img= Image.open(self.recipeimage.path) # opening image
